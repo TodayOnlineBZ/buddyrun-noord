@@ -1,0 +1,394 @@
+---
+import { Picture, Image, getImage } from 'astro:assets';
+import '@fontsource-variable/bricolage-grotesque/opsz.css';
+import '@fontsource/cabin/400.css';
+import '@fontsource/cabin/500.css';
+import '@fontsource/cabin/600.css';
+import '@fontsource/cabin/700.css';
+import '../styles/global.css';
+import { gallery, sponsors, panels, CONTACT_EMAIL, KVK, PHOTO_ALBUM_2025 } from '../data/content';
+import logoWhite from '../assets/brn-logo.png';
+import logoNavy from '../assets/brn-logo-navy.png';
+
+const photoModules = import.meta.glob<{ default: ImageMetadata }>('../assets/photos/*.jpg', { eager: true });
+const logoModules = import.meta.glob<{ default: ImageMetadata }>('../assets/logos/*.png', { eager: true });
+const photo = (name: string) => photoModules[`../assets/photos/${name}.jpg`].default;
+const logo = (name: string) => logoModules[`../assets/logos/${name}.png`].default;
+
+const FORMATS: ('avif' | 'webp')[] = ['avif', 'webp'];
+const W = [640, 960, 1280, 1600];
+
+// Grote versies voor de lightbox
+const galleryFull = await Promise.all(
+  gallery.map(async (g) => {
+    const img = await getImage({ src: photo(g.file), width: 1600, format: 'webp', quality: 78 });
+    return { ...g, full: img.src };
+  })
+);
+
+const site = 'https://buddyrun-noord.vercel.app';
+const title = 'Buddy Run Noord — Samen lukt er zoveel meer';
+const description = 'Een obstakelrun vol plezier, verbinding en bijzondere momenten. Voor mensen met een verstandelijke beperking en hun buddy’s. Groningen — nieuwe datum volgt.';
+const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const plus = '<svg viewBox="0 0 24 24" fill="none" stroke="#00385C" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+const squiggle = '<svg viewBox="0 0 300 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 20 C 60 4, 110 28, 160 14 S 250 6, 296 16"/></svg>';
+
+const faqs = [
+  { q: 'Wat is Buddy Run Noord?', a: 'Een obstakelrun waar samenwerking, inclusiviteit en doorzettingsvermogen centraal staan. Bij Buddy Run Noord geloven we dat iedereen in beweging kan komen, ongeacht beperkingen.' },
+  { q: 'Met wie loop ik mee?', a: 'Je loopt samen met je buddy. Dat kan een vriend, familielid, begeleider of vrijwilliger zijn.' },
+  { q: 'Wat voor obstakels zijn er?', a: 'Onder andere netten om in te klimmen, balken om over te balanceren en een route door het bos.' },
+  { q: 'Wat gebeurt er na de finish?', a: 'Je geniet na met muziek, hapjes en drankjes. In 2025 kreeg iedere deelnemer een gouden medaille en een groepsfoto met het team. Er was een optreden van een zanger, een clown, voetbal en pizza bakken, en de dag sloot af met een polonaise.' },
+  { q: 'Wanneer is de volgende editie?', a: 'Nieuwe datum volgt. Laat je gegevens achter via ‘Houd me op de hoogte’, dan hoor je het zodra de datum bekend is.' },
+];
+---
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <!-- Prototype: niet indexeren zolang buddyrun-noord.nl de officiële site is -->
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#00385C" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={`${site}/og.jpg`} />
+  <meta property="og:locale" content="nl_NL" />
+  <script is:inline>
+    document.documentElement.classList.add('js');
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('rm');
+  </script>
+</head>
+<body>
+<div class="page">
+<a class="skip" href="#inhoud">Naar de inhoud</a>
+
+<header class="hdr" id="hdr">
+  <div class="hdr-in">
+    <a class="logo" href="#top" aria-label="Buddy Run Noord — naar boven">
+      <Image class="l-white" src={logoWhite} alt="Buddy Run Noord" width={312} loading="eager" />
+      <Image class="l-navy" src={logoNavy} alt="" width={312} loading="eager" />
+    </a>
+    <nav class="nav" aria-label="Hoofdmenu">
+      <a class="nl" href="#over">Over de run</a>
+      <a class="nl" href="#sfeer">Sfeer</a>
+      <a class="nl" href="#meedoen">Meedoen</a>
+      <a class="nl" href="#sponsoren">Sponsoren</a>
+      <a class="btn btn-or btn-sm" href="#meedoen">Doe mee</a>
+    </nav>
+    <button class="menu-btn" id="menu-btn" type="button" aria-controls="mnav" aria-expanded="false" aria-label="Menu openen">
+      <svg class="i-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      <svg class="i-close" hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <nav class="mnav" id="mnav" aria-label="Mobiel menu" hidden>
+    <a href="#over">Over de run</a>
+    <a href="#sfeer">Sfeer</a>
+    <a href="#meedoen">Meedoen</a>
+    <a href="#sponsoren">Sponsoren</a>
+    <a class="btn btn-or" href="#meedoen">Doe mee</a>
+  </nav>
+</header>
+
+<main id="inhoud">
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="hero-frame f-1961">
+    <Picture class="hero-img" src={photo('dsc01961')} formats={FORMATS} widths={W} sizes="100vw" quality={78} loading="eager" fetchpriority="high" alt="Deelnemers en buddy’s rennen hand in hand en juichend over de weg." />
+    <p class="sticker"><small>Volgende editie</small>Nieuwe datum volgt</p>
+  </div>
+  <div class="hero-below">
+    <div class="hero-card">
+      <h1 id="hero-title" class="up">Samen lukt er <span class="squig">zoveel meer.<Fragment set:html={squiggle} /></span></h1>
+      <p class="lead up u2">Een obstakelrun vol plezier, verbinding en bijzondere momenten. Voor mensen met een verstandelijke beperking en hun buddy’s.</p>
+      <div class="hero-actions up u3">
+        <a class="btn btn-or" href="#meedoen">Ontdek hoe je meedoet <Fragment set:html={arrow} /></a>
+        <a class="btn btn-ghost" href="#sfeer">Proef de sfeer</a>
+      </div>
+    </div>
+    <ul class="facts" aria-label="In het kort" style="list-style:none;margin:0">
+      <li class="fact"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#00385C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></i>Groningen</li>
+      <li class="fact"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#00385C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><circle cx="17" cy="9" r="2.6"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M14.5 14.3c3.5-.8 6.5 1.4 6.5 5.7"/></svg></i>Ruim 100 deelnemers in 2025</li>
+    </ul>
+  </div>
+</section>
+
+<div class="journey" id="journey">
+  <svg class="jline" id="jline" aria-hidden="true"><path id="jpath" d="" /></svg>
+
+  <section class="intro" id="over" aria-labelledby="over-title">
+    <div class="wrap z intro-grid">
+      <div class="rv">
+        <p class="eyebrow">Over de run</p>
+        <h2 id="over-title">Obstakels overwinnen. Herinneringen maken.</h2>
+        <p class="lead">Buddy Run Noord is een obstakelrun speciaal voor mensen met een verstandelijke beperking. Je doet mee samen met vrienden, familie, begeleiders of vrijwilligers. Onderweg wachten netten om in te klimmen, balken om over te balanceren en een route door het bos. Na de finish geniet je na met muziek, hapjes en drankjes.</p>
+        <ul class="values" style="list-style:none;padding:0">
+          <li class="val"><i class="v1" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#00385C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11l3-3 3 2 4-4"/><path d="M3 14l4-3 5 5a2 2 0 0 0 3 0l6-6"/><path d="M2 19h20"/></svg></i>Samen op pad.</li>
+          <li class="val"><i class="v2" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#00385C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14.5c1 1.5 2.4 2.3 4 2.3s3-.8 4-2.3"/><path d="M9 9.5h.01M15 9.5h.01"/></svg></i>Plezier voorop.</li>
+          <li class="val"><i class="v3" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#00385C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M9 13.5L7.5 21l4.5-2.5 4.5 2.5-1.5-7.5"/></svg></i>Trots over de finish.</li>
+        </ul>
+        <p class="note"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.6 6.3 6.8.6-5.2 4.5 1.6 6.6L12 16.6 6.2 20l1.6-6.6L2.6 8.9l6.8-.6z"/></svg><span>De eerste editie op vrijdag 4 juli 2025 telde ruim 100 deelnemers. Iedereen ging naar huis met een gouden medaille en een groepsfoto met het team.</span></p>
+      </div>
+      <div class="collage">
+        <div class="blob b1" aria-hidden="true"></div>
+        <div class="blob b2" aria-hidden="true"></div>
+        <svg class="dots" viewBox="0 0 90 90" aria-hidden="true"><g fill="currentColor">{[10,35,60].map((y) => [10,35,60,85].map((x) => <circle cx={x} cy={y} r="4" />))}</g></svg>
+        <figure class="cp c1 rv drop"><div class="ph f-1943"><Picture src={photo('dsc01943')} formats={FORMATS} widths={[640,960]} sizes="(max-width: 760px) 86vw, 420px" quality={78} alt="Twee deelnemers zitten bovenop het klimnet en juichen met de armen in de lucht." /></div></figure>
+        <figure class="cp c2 rv drop d1"><div class="ph f-2015"><Picture src={photo('dsc02015')} formats={FORMATS} widths={[640,960]} sizes="(max-width: 760px) 70vw, 300px" quality={78} alt="Een team in groene en blauwe shirts helpt elkaar bij een houten klimobstakel in het bos." /></div></figure>
+        <figure class="cp c3 rv drop d2"><div class="ph f-2233"><Picture src={photo('dsc02233')} formats={FORMATS} widths={[640,960]} sizes="(max-width: 760px) 84vw, 360px" quality={78} alt="Twee deelnemers met een gouden medaille om hun nek juichen samen na de finish." /></div></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="sfeer" id="sfeer" aria-labelledby="sfeer-title">
+    <div class="wrap z">
+      <div class="sfeer-head rv">
+        <div>
+          <p class="eyebrow">Sfeer</p>
+          <h2 id="sfeer-title">Dit is het gevoel van Buddy Run Noord.</h2>
+        </div>
+        <p>Rennen, klimmen, elkaar een hand geven en samen feestvieren. Een indruk van de eerste editie in 2025.</p>
+      </div>
+      <div class="mosaic">
+        {galleryFull.map((g, i) => (
+          <figure class={`cell rv pop ${g.cls}`}>
+            <div class="par" data-par={g.par ? '1' : '0'}>
+              <button class={`ph ${g.focus}`} type="button" data-lb={i} data-full={g.full} data-alt={g.alt} aria-label={`Bekijk foto ${i + 1} van ${galleryFull.length} groot: ${g.alt}`}>
+                <Picture src={photo(g.file)} formats={FORMATS} widths={[480, 800, 1200]} sizes="(max-width: 760px) 92vw, 50vw" quality={76} alt={g.alt} />
+                <span class="zoom" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M11 8v6M8 11h6"/></svg></span>
+              </button>
+              {g.cap && <figcaption class="cap">{g.cap}</figcaption>}
+            </div>
+          </figure>
+        ))}
+      </div>
+      <p class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>Klik op een foto om hem groot te bekijken. Gebruik de pijltjestoetsen om te bladeren.</p>
+    </div>
+  </section>
+
+  <section class="meedoen" id="meedoen" aria-labelledby="meedoen-title">
+    <div class="wrap z">
+      <div class="meedoen-head rv">
+        <p class="eyebrow">Meedoen</p>
+        <h2 id="meedoen-title">Meedoen op jouw manier.</h2>
+        <p class="lead">Loop mee, help mee of maak de dag mogelijk. Kies wat bij jou past.</p>
+      </div>
+
+      <div class="route-main route">
+        <div class="rm-photo rv drop">
+          <div class="blobfill" aria-hidden="true"></div>
+          <div class="ph f-2114"><Picture src={photo('dsc02114')} formats={FORMATS} widths={[640,960,1280]} sizes="(max-width: 1024px) 92vw, 640px" quality={78} alt="Deelnemers en hun buddy’s lopen arm in arm over het parcours." /></div>
+        </div>
+        <div class="rv d1">
+          <p class="tag">Als deelnemer</p>
+          <h3>Samen met je buddy over de finish.</h3>
+          <p>Je loopt de run samen met een buddy: een vriend, familielid, begeleider of vrijwilliger. Zo neem je ieder obstakel samen.</p>
+          <button class="btn btn-or" type="button" data-panel="deelnemer">Houd me op de hoogte <Fragment set:html={arrow} /></button>
+          <p class="small"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Nieuwe datum volgt. De inschrijving voor de volgende editie is nog niet open.</p>
+        </div>
+      </div>
+
+      <div class="route-duo">
+        <article class="rcard peach route rv">
+          <div class="ph f-2299"><Picture src={photo('dsc02299')} formats={FORMATS} widths={[640,960]} sizes="(max-width: 760px) 92vw, 560px" quality={78} alt="Een groep deelnemers en begeleiders wandelt samen over het parcours." /></div>
+          <div class="rbody">
+            <p class="tag" style="background:#FFFFFF">Als vrijwilliger</p>
+            <h3>Help mee aan een mooie dag.</h3>
+            <p>Wat leuk dat je wilt helpen bij dit evenement! Als vrijwilliger draag je bij aan een dag vol plezier voor alle deelnemers.</p>
+            <button class="btn btn-navy" type="button" data-panel="vrijwilliger">Word vrijwilliger <Fragment set:html={arrow} /></button>
+          </div>
+        </article>
+        <article class="rcard blue route rv d1">
+          <div class="ph f-2666"><Picture src={photo('dsc02666')} formats={FORMATS} widths={[640,960]} sizes="(max-width: 760px) 92vw, 560px" quality={78} alt="Een team in oranje shirts staat juichend met medailles op het podium." /></div>
+          <div class="rbody">
+            <p class="tag" style="background:#FFFFFF">Als sponsor</p>
+            <h3>Steun dit unieke evenement.</h3>
+            <p>Wil je met je bedrijf Buddy Run Noord mogelijk maken? Laat het ons weten, dan nemen we contact met je op.</p>
+            <button class="btn btn-navy" type="button" data-panel="sponsor">Word sponsor <Fragment set:html={arrow} /></button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="prak" id="praktisch" aria-labelledby="prak-title">
+  <div class="wrap prak-grid">
+    <div class="rv">
+      <p class="eyebrow">Praktisch</p>
+      <h2 id="prak-title">Goed om te weten.</h2>
+      <dl class="info">
+        <div class="irow"><dt>Volgende editie</dt><dd><span class="badge">Nieuwe datum volgt</span></dd></div>
+        <div class="irow"><dt>Waar</dt><dd>Groningen. De exacte locatie van de volgende editie volgt.</dd></div>
+        <div class="irow"><dt>Voor wie</dt><dd>Mensen met een verstandelijke beperking, samen met een buddy.</dd></div>
+        <div class="irow"><dt>Na de finish</dt><dd>Muziek, hapjes en drankjes.</dd></div>
+        <div class="irow"><dt>Contact</dt><dd><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></dd></div>
+      </dl>
+    </div>
+    <div class="faq rv d1">
+      <h3>Veelgestelde vragen</h3>
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}<i aria-hidden="true"><Fragment set:html={plus} /></i></summary>
+          <div class="ans">{f.a}</div>
+        </details>
+      ))}
+      <details>
+        <summary>Wat kost deelname en hoe lang is het parcours?<i aria-hidden="true"><Fragment set:html={plus} /></i></summary>
+        <div class="ans">Daarover is nog geen informatie gepubliceerd. Heb je een vraag? Mail naar <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="spons" id="sponsoren" aria-labelledby="spons-title">
+  <div class="wrap">
+    <div class="spons-head rv">
+      <div>
+        <p class="eyebrow">Sponsoren</p>
+        <h2 id="spons-title">Samen maken we deze dag mogelijk.</h2>
+        <p>Deze bedrijven en fondsen steunden Buddy Run Noord bij eerdere edities. Dank jullie wel!</p>
+      </div>
+      <button class="btn btn-navy" type="button" data-panel="sponsor">Word sponsor</button>
+    </div>
+    <div class="logos">
+      {sponsors.map((s) => (
+        <a class={`ltile rv ${s.size}`} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`${s.name} (opent in nieuw venster)`}>
+          <Image src={logo(s.logo)} alt={s.name} width={280} format="png" />
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="close dark" aria-labelledby="close-title">
+  <div class="wrap">
+    <div class="close-photo rv">
+      <div class="ph f-2530"><Picture src={photo('dsc02530')} formats={FORMATS} widths={[640,960,1280,1600]} sizes="(max-width: 1240px) 94vw, 1180px" quality={78} alt="Groepsfoto van deelnemers, buddy’s en vrijwilligers die juichend hun armen in de lucht steken." /></div>
+    </div>
+    <div class="close-txt">
+      <h2 id="close-title" class="rv">Een dag die je <span class="squig">samen<Fragment set:html={squiggle} /></span> meeneemt.</h2>
+      <div class="rv d1">
+        <p>De inschrijving voor de volgende editie is nog niet open. Laat je gegevens achter, of help mee als vrijwilliger of sponsor.</p>
+        <div class="close-actions">
+          <button class="btn btn-or" type="button" data-panel="deelnemer">Houd me op de hoogte</button>
+          <button class="btn btn-line-light" type="button" data-panel="vrijwilliger">Word vrijwilliger</button>
+          <button class="btn btn-line-light" type="button" data-panel="sponsor">Word sponsor</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="foot">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <Image class="flogo" src={logoWhite} alt="Buddy Run Noord" width={360} />
+          <p style="margin-top:16px;max-width:26em">Obstakelrun speciaal voor mensen met een verstandelijke beperking, samen met hun buddy’s. Groningen.</p>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <ul>
+            <li><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></li>
+            <li>KvK {KVK}</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Ontdek</h3>
+          <ul>
+            <li><a href="#over">Over de run</a></li>
+            <li><a href="#sfeer">Sfeer</a></li>
+            <li><a href="#meedoen">Meedoen</a></li>
+            <li><a href="#sponsoren">Sponsoren</a></li>
+            <li><a href={PHOTO_ALBUM_2025} target="_blank" rel="noopener noreferrer">Fotoalbum 2025 ↗</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© Buddy Run Noord</span>
+        <span class="demo-pill">Prototype · formulieren zijn demonstraties</span>
+      </div>
+    </div>
+  </footer>
+</section>
+</main>
+
+<!-- Formulierpaneel -->
+<div class="ov" id="panel" role="dialog" aria-modal="true" aria-labelledby="panel-title" hidden>
+  <button class="ov-bg" type="button" tabindex="-1" aria-label="Sluiten" data-close></button>
+  <div class="panel">
+    <div class="panel-top">
+      <span class="tag or">Demo</span>
+      <button class="xbtn" type="button" aria-label="Sluiten" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <h2 id="panel-title">Houd me op de hoogte</h2>
+    <p class="intro-t" id="panel-intro"></p>
+    <div id="panel-form-wrap">
+      <p class="demo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Dit is een demonstratie. Er wordt niets verzonden of opgeslagen.</span></p>
+      <form class="form" id="panel-form" novalidate>
+        <div aria-live="polite"><p class="errsum" id="errsum" hidden>Controleer de gemarkeerde velden.</p></div>
+        <div class="fld" id="fld-bedrijf">
+          <label for="f-bedrijf">Bedrijfsnaam</label>
+          <input id="f-bedrijf" name="bedrijf" type="text" autocomplete="organization" aria-describedby="e-bedrijf" />
+          <span class="err" id="e-bedrijf" hidden></span>
+        </div>
+        <div class="frow">
+          <div class="fld">
+            <label for="f-voornaam">Voornaam</label>
+            <input id="f-voornaam" name="voornaam" type="text" autocomplete="given-name" aria-describedby="e-voornaam" />
+            <span class="err" id="e-voornaam" hidden></span>
+          </div>
+          <div class="fld">
+            <label for="f-achternaam">Achternaam</label>
+            <input id="f-achternaam" name="achternaam" type="text" autocomplete="family-name" aria-describedby="e-achternaam" />
+            <span class="err" id="e-achternaam" hidden></span>
+          </div>
+        </div>
+        <div class="fld">
+          <label for="f-email">E-mailadres</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" aria-describedby="e-email" />
+          <span class="err" id="e-email" hidden></span>
+        </div>
+        <div class="fld">
+          <label for="f-telefoon">Telefoonnummer <span>(optioneel)</span></label>
+          <input id="f-telefoon" name="telefoon" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="e-telefoon" />
+          <span class="err" id="e-telefoon" hidden></span>
+        </div>
+        <div class="fld">
+          <label for="f-bericht">Bericht <span>(optioneel)</span></label>
+          <textarea id="f-bericht" name="bericht"></textarea>
+        </div>
+        <button class="btn btn-or" type="submit" id="panel-submit">Versturen</button>
+        <p class="later" id="panel-later"></p>
+      </form>
+    </div>
+    <div class="ok" id="panel-ok" role="status" hidden>
+      <div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h3 id="ok-title">Bedankt! (demo)</h3>
+      <p>Zo ziet de bevestiging eruit. In deze demonstratie is er niets verzonden: de echte koppeling volgt bij de technische uitwerking.</p>
+      <button class="btn btn-navy" type="button" style="margin-top:20px" data-close>Terug naar de website</button>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Foto’s van Buddy Run Noord" hidden>
+  <button class="ov-bg" type="button" tabindex="-1" aria-label="Sluiten" data-close></button>
+  <figure class="lb-fig">
+    <img id="lb-img" src="data:," alt="" />
+    <figcaption><b id="lb-pos"></b><span id="lb-cap"></span></figcaption>
+  </figure>
+  <button class="lbb lb-prev" type="button" aria-label="Vorige foto" id="lb-prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="lbb lb-next" type="button" aria-label="Volgende foto" id="lb-next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+  <button class="lbb lb-close" type="button" aria-label="Sluiten" id="lb-close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+</div>
+</div>
+
+<script is:inline type="application/json" id="panel-config" set:html={JSON.stringify(panels)}></script>
+<script>
+  import '../scripts/main.js';
+</script>
+</body>
+</html>
