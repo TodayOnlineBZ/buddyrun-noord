@@ -104,24 +104,33 @@ function trapTab(e, root) {
 }
 function lockScroll(on) { document.body.style.overflow = on ? 'hidden' : ''; }
 
-/* ---------- Lightbox ---------- */
+/* ---------- Lightbox (per lijst: sfeer, e25, e26) ---------- */
 const lb = $('#lb');
 const lbImg = $('#lb-img');
-const items = $$('[data-lb]');
+const lists = {};
+$$('[data-lb-list]').forEach((b) => {
+  const k = b.dataset.lbList;
+  (lists[k] = lists[k] || []).push(b);
+});
+const lbTitles = { sfeer: 'Foto’s uit de sfeercollage', e25: 'Foto’s editie 2025', e26: 'Foto’s editie 2026' };
+let lbKey = 'sfeer';
 let lbIndex = -1;
 function showLb(i) {
+  const items = lists[lbKey];
   lbIndex = (i + items.length) % items.length;
   const b = items[lbIndex];
   lbImg.src = b.dataset.full;
   lbImg.alt = b.dataset.alt;
   $('#lb-cap').textContent = b.dataset.alt;
-  $('#lb-pos').textContent = `${lbIndex + 1} / ${items.length}`;
-  // volgende alvast laden
+  $('#lb-pos').textContent = `${b.dataset.year} · ${lbIndex + 1} / ${items.length}`;
   const n = items[(lbIndex + 1) % items.length];
   const pre = new Image(); pre.src = n.dataset.full;
 }
-function openLb(i) {
+function openLb(key, i) {
   lastTrigger = document.activeElement;
+  lbKey = key;
+  lb.setAttribute('aria-label', lbTitles[key] || 'Foto’s');
+  pauseReel();
   showLb(i);
   lb.hidden = false;
   lockScroll(true);
@@ -133,7 +142,7 @@ function closeLb() {
   lbIndex = -1;
   if (lastTrigger) lastTrigger.focus();
 }
-items.forEach((b, i) => b.addEventListener('click', () => openLb(i)));
+Object.keys(lists).forEach((k) => lists[k].forEach((b, i) => b.addEventListener('click', () => openLb(k, i))));
 $('#lb-prev').addEventListener('click', () => showLb(lbIndex - 1));
 $('#lb-next').addEventListener('click', () => showLb(lbIndex + 1));
 $$('[data-close]', lb).forEach((b) => b.addEventListener('click', closeLb));
@@ -143,7 +152,6 @@ lb.addEventListener('keydown', (e) => {
   else if (e.key === 'ArrowLeft') { e.preventDefault(); showLb(lbIndex - 1); }
   else trapTab(e, lb);
 });
-// swipe op mobiel
 let tx = null;
 lb.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; }, { passive: true });
 lb.addEventListener('touchend', (e) => {
@@ -151,6 +159,62 @@ lb.addEventListener('touchend', (e) => {
   const dx = e.changedTouches[0].clientX - tx;
   if (Math.abs(dx) > 50) showLb(lbIndex + (dx < 0 ? 1 : -1));
   tx = null;
+});
+
+/* ---------- Video 2026 ---------- */
+const reel = $('#reel');
+const reelCover = $('#reel-cover');
+function pauseReel() { if (reel && !reel.paused) reel.pause(); }
+if (reel && reelCover) {
+  reelCover.addEventListener('click', () => {
+    reel.controls = true;
+    reel.muted = false;
+    reelCover.hidden = true;
+    const p = reel.play();
+    if (p && p.catch) p.catch(() => {});
+    reel.focus();
+  });
+  reel.addEventListener('ended', () => {
+    reel.controls = false;
+    try { reel.currentTime = 0; } catch (err) { /* */ }
+    reel.load(); // toont de cover-afbeelding weer
+    reelCover.hidden = false;
+  });
+}
+
+/* ---------- Edities (tabs) ---------- */
+const tabs = $$('#ed-tabs [role="tab"]');
+function selectEd(y, focus) {
+  tabs.forEach((t) => {
+    const on = t.dataset.ed === y;
+    t.classList.toggle('on', on);
+    t.setAttribute('aria-selected', String(on));
+    t.tabIndex = on ? 0 : -1;
+    const panelEl = document.getElementById(t.getAttribute('aria-controls'));
+    if (on && panelEl.hidden) {
+      panelEl.hidden = false;
+      // animatie opnieuw starten bij het wisselen
+      panelEl.style.animation = 'none'; void panelEl.offsetWidth; panelEl.style.animation = '';
+      $$('.thumbs > *, .ed-hero img', panelEl).forEach((el) => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; });
+    } else if (!on) {
+      panelEl.hidden = true;
+    }
+    if (on && focus) t.focus();
+  });
+  if (y !== '2026') pauseReel();
+  buildPath(); drawPath();
+}
+tabs.forEach((t) => t.addEventListener('click', () => selectEd(t.dataset.ed, false)));
+$('#ed-tabs').addEventListener('keydown', (e) => {
+  const cur = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+  let next = -1;
+  if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+  else if (e.key === 'ArrowLeft') next = (cur - 1 + tabs.length) % tabs.length;
+  else if (e.key === 'Home') next = 0;
+  else if (e.key === 'End') next = tabs.length - 1;
+  if (next < 0) return;
+  e.preventDefault();
+  selectEd(tabs[next].dataset.ed, true);
 });
 
 /* ---------- Formulierpanelen (demo) ---------- */
@@ -169,6 +233,7 @@ function clearErrors() {
 }
 function openPanel(type) {
   panelType = cfg[type] ? type : 'deelnemer';
+  pauseReel();
   const c = cfg[panelType];
   lastTrigger = document.activeElement;
   setMenu(false);

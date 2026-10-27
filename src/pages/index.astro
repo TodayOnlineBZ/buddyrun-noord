@@ -6,7 +6,8 @@ import '@fontsource/cabin/500.css';
 import '@fontsource/cabin/600.css';
 import '@fontsource/cabin/700.css';
 import '../styles/global.css';
-import { gallery, sponsors, panels, CONTACT_EMAIL, KVK, PHOTO_ALBUM_2025 } from '../data/content';
+import { gallery, edition2025, edition2026, sponsors, panels, CONTACT_EMAIL, KVK, PHOTO_ALBUM_2025, PHOTO_ALBUM_2026, PHOTO_CREDIT_2026 } from '../data/content';
+import reelPoster from '../assets/reel-poster.jpg';
 import logoWhite from '../assets/brn-logo.png';
 import logoNavy from '../assets/brn-logo-navy.png';
 
@@ -19,12 +20,19 @@ const FORMATS: ('avif' | 'webp')[] = ['avif', 'webp'];
 const W = [640, 960, 1280, 1600];
 
 // Grote versies voor de lightbox
-const galleryFull = await Promise.all(
-  gallery.map(async (g) => {
-    const img = await getImage({ src: photo(g.file), width: 1600, format: 'webp', quality: 78 });
+const withFull = <T extends { file: string }>(list: T[]) =>
+  Promise.all(list.map(async (g) => {
+    const m = photo(g.file);
+    const img = await getImage({ src: m, width: Math.min(1600, m.width), format: 'webp', quality: 78 });
     return { ...g, full: img.src };
-  })
-);
+  }));
+const galleryFull = await withFull(gallery);
+const ed25 = await withFull(edition2025);
+const ed26 = await withFull(edition2026);
+const poster = await getImage({ src: reelPoster, width: 720, format: 'webp', quality: 80 });
+const zoomIcon = '<span class="zoom" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M11 8v6M8 11h6"/></svg></span>';
+const calIcon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>';
+const extIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>';
 
 const site = 'https://buddyrun-noord.vercel.app';
 const title = 'Buddy Run Noord — Samen lukt er zoveel meer';
@@ -76,6 +84,7 @@ const faqs = [
     <nav class="nav" aria-label="Hoofdmenu">
       <a class="nl" href="#over">Over de run</a>
       <a class="nl" href="#sfeer">Sfeer</a>
+      <a class="nl" href="#herbeleef">Herbeleef</a>
       <a class="nl" href="#meedoen">Meedoen</a>
       <a class="nl" href="#sponsoren">Sponsoren</a>
       <a class="btn btn-or btn-sm" href="#meedoen">Doe mee</a>
@@ -88,6 +97,7 @@ const faqs = [
   <nav class="mnav" id="mnav" aria-label="Mobiel menu" hidden>
     <a href="#over">Over de run</a>
     <a href="#sfeer">Sfeer</a>
+    <a href="#herbeleef">Herbeleef</a>
     <a href="#meedoen">Meedoen</a>
     <a href="#sponsoren">Sponsoren</a>
     <a class="btn btn-or" href="#meedoen">Doe mee</a>
@@ -136,9 +146,9 @@ const faqs = [
         <div class="blob b1" aria-hidden="true"></div>
         <div class="blob b2" aria-hidden="true"></div>
         <svg class="dots" viewBox="0 0 90 90" aria-hidden="true"><g fill="currentColor">{[10,35,60].map((y) => [10,35,60,85].map((x) => <circle cx={x} cy={y} r="4" />))}</g></svg>
-        <figure class="cp c1 rv drop"><div class="ph f-1943"><Picture src={photo('dsc01943')} formats={FORMATS} widths={[640,960]} sizes="(max-width: 760px) 86vw, 420px" quality={78} alt="Twee deelnemers zitten bovenop het klimnet en juichen met de armen in de lucht." /></div></figure>
-        <figure class="cp c2 rv drop d1"><div class="ph f-2015"><Picture src={photo('dsc02015')} formats={FORMATS} widths={[640,960]} sizes="(max-width: 760px) 70vw, 300px" quality={78} alt="Een team in groene en blauwe shirts helpt elkaar bij een houten klimobstakel in het bos." /></div></figure>
-        <figure class="cp c3 rv drop d2"><div class="ph f-2233"><Picture src={photo('dsc02233')} formats={FORMATS} widths={[640,960]} sizes="(max-width: 760px) 84vw, 360px" quality={78} alt="Twee deelnemers met een gouden medaille om hun nek juichen samen na de finish." /></div></figure>
+        <figure class="cp c1 rv drop"><div class="ph f-129"><Picture src={photo('b26-129')} formats={FORMATS} widths={[640,960]} sizes="(max-width: 760px) 86vw, 420px" quality={80} alt="Bovenop het klimnet geven een deelnemer en zijn buddy elkaar een high five (editie 2026)." /></div></figure>
+        <figure class="cp c2 rv drop d1"><div class="ph f-19"><Picture src={photo('b26-19')} formats={FORMATS} widths={[480,720]} sizes="(max-width: 760px) 70vw, 300px" quality={80} alt="Lachend hangt een deelnemer aan de klimstangen, zijn buddy staat klaar om te helpen (editie 2026)." /></div></figure>
+        <figure class="cp c3 rv drop d2"><div class="ph f-1943"><Picture src={photo('dsc01943')} formats={FORMATS} widths={[640,960]} sizes="(max-width: 760px) 84vw, 360px" quality={78} alt="Twee deelnemers zitten bovenop het klimnet en juichen met de armen in de lucht (editie 2025)." /></div></figure>
       </div>
     </div>
   </section>
@@ -150,22 +160,98 @@ const faqs = [
           <p class="eyebrow">Sfeer</p>
           <h2 id="sfeer-title">Dit is het gevoel van Buddy Run Noord.</h2>
         </div>
-        <p>Rennen, klimmen, elkaar een hand geven en samen feestvieren. Een indruk van de eerste editie in 2025.</p>
+        <p>Rennen, klimmen, elkaar een hand geven en samen feestvieren. Een indruk van de edities 2025 en 2026.</p>
       </div>
       <div class="mosaic">
         {galleryFull.map((g, i) => (
           <figure class={`cell rv pop ${g.cls}`}>
             <div class="par" data-par={g.par ? '1' : '0'}>
-              <button class={`ph ${g.focus}`} type="button" data-lb={i} data-full={g.full} data-alt={g.alt} aria-label={`Bekijk foto ${i + 1} van ${galleryFull.length} groot: ${g.alt}`}>
-                <Picture src={photo(g.file)} formats={FORMATS} widths={[480, 800, 1200]} sizes="(max-width: 760px) 92vw, 50vw" quality={76} alt={g.alt} />
+              <button class={`ph ${g.focus}`} type="button" data-lb-list="sfeer" data-full={g.full} data-alt={g.alt} data-year={g.year} aria-label={`Bekijk foto ${i + 1} van ${galleryFull.length} (${g.year}) groot: ${g.alt}`}>
+                <Picture src={photo(g.file)} formats={FORMATS} widths={g.year === '2026' ? [480, 800, 1024] : [480, 800, 1200]} sizes="(max-width: 760px) 92vw, 50vw" quality={78} alt={g.alt} />
                 <span class="zoom" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M11 8v6M8 11h6"/></svg></span>
               </button>
+              <span class={`yr ${g.year === '2026' ? 'y26' : ''}`} aria-hidden="true">{g.year}</span>
               {g.cap && <figcaption class="cap">{g.cap}</figcaption>}
             </div>
           </figure>
         ))}
       </div>
       <p class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>Klik op een foto om hem groot te bekijken. Gebruik de pijltjestoetsen om te bladeren.</p>
+    </div>
+  </section>
+
+  <section class="relive dark" id="herbeleef" aria-labelledby="relive-title">
+    <div class="wrap z">
+      <div class="relive-head rv">
+        <div>
+          <p class="eyebrow on-dark">Edities</p>
+          <h2 id="relive-title">Herbeleef de Buddy Run</h2>
+        </div>
+        <p>Kies een editie, start de sfeerimpressie en blader door de foto’s.</p>
+      </div>
+      <div class="tabs rv" role="tablist" aria-label="Kies een editie" id="ed-tabs">
+        <button class="tab on" id="tab-2026" type="button" role="tab" aria-controls="panel-2026" aria-selected="true" tabindex="0" data-ed="2026"><span class="tab-y">2026</span><span class="tab-l">Editie 2</span></button>
+        <button class="tab" id="tab-2025" type="button" role="tab" aria-controls="panel-2025" aria-selected="false" tabindex="-1" data-ed="2025"><span class="tab-y">2025</span><span class="tab-l">Editie 1</span></button>
+      </div>
+
+      <div class="ed-panel" id="panel-2026" role="tabpanel" aria-labelledby="tab-2026">
+        <div class="ed-top ed-top26">
+          <div class="reel">
+            <video class="reel-v" id="reel" src="/video/buddyrun-2026.mp4" poster={poster.src} preload="none" playsinline aria-label="Sfeerimpressie Buddy Run Noord 2026"></video>
+            <button class="reel-cover" id="reel-cover" type="button" aria-label="Video afspelen: Beleef Buddy Run 2026 opnieuw (38 seconden)">
+              <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></span>
+              <span class="reel-t">Beleef Buddy Run 2026 opnieuw</span>
+              <span class="reel-d">Sfeerimpressie · 0:38</span>
+            </button>
+          </div>
+          <div class="ed-side">
+            <button class={`ph ed-hero ${ed26[0].focus}`} type="button" data-lb-list="e26" data-full={ed26[0].full} data-alt={ed26[0].alt} data-year="2026" aria-label={`Bekijk foto 1 van ${ed26.length} (2026) groot: ${ed26[0].alt}`}>
+              <Picture src={photo(ed26[0].file)} formats={FORMATS} widths={[640, 1024]} sizes="(max-width: 1024px) 92vw, 760px" quality={80} alt={ed26[0].alt} />
+              <Fragment set:html={zoomIcon} />
+            </button>
+            <div class="ed-txt">
+              <p class="ed-date"><Fragment set:html={calIcon} />Vrijdag 5 juni 2026 · Groningen</p>
+              <h3>Klimmen, klauteren en samen juichen.</h3>
+              <p>De tweede Buddy Run Noord: samen door het bos, over netten en klimstangen, en met z’n allen onder de finishboog door. Bekijk de sfeerimpressie en blader door de foto’s.</p>
+              <a class="btn btn-line-light" href={PHOTO_ALBUM_2026} target="_blank" rel="noopener noreferrer">Volledig fotoalbum 2026 <Fragment set:html={arrow} /></a>
+            </div>
+          </div>
+        </div>
+        <div class="thumbs">
+          {ed26.slice(1).map((t, i) => (
+            <button class={`ph thumb ${t.focus}`} type="button" data-lb-list="e26" data-full={t.full} data-alt={t.alt} data-year="2026" aria-label={`Bekijk foto ${i + 2} van ${ed26.length} (2026) groot: ${t.alt}`}>
+              <Picture src={photo(t.file)} formats={FORMATS} widths={[320, 480]} sizes="(max-width: 760px) 31vw, 190px" quality={76} alt={t.alt} />
+              <Fragment set:html={zoomIcon} />
+            </button>
+          ))}
+          <a class="album" href={PHOTO_ALBUM_2026} target="_blank" rel="noopener noreferrer"><Fragment set:html={extIcon} />Alle foto’s van 2026</a>
+        </div>
+        <p class="credit">Foto’s editie 2026: {PHOTO_CREDIT_2026}</p>
+      </div>
+
+      <div class="ed-panel" id="panel-2025" role="tabpanel" aria-labelledby="tab-2025" hidden>
+        <div class="ed-top">
+          <button class={`ph ed-hero ${ed25[0].focus}`} type="button" data-lb-list="e25" data-full={ed25[0].full} data-alt={ed25[0].alt} data-year="2025" aria-label={`Bekijk foto 1 van ${ed25.length} (2025) groot: ${ed25[0].alt}`}>
+            <Picture src={photo(ed25[0].file)} formats={FORMATS} widths={[640, 960, 1280]} sizes="(max-width: 1024px) 92vw, 700px" quality={78} alt={ed25[0].alt} />
+            <Fragment set:html={zoomIcon} />
+          </button>
+          <div class="ed-txt">
+            <p class="ed-date"><Fragment set:html={calIcon} />Vrijdag 4 juli 2025</p>
+            <h3>De allereerste Buddy Run Noord.</h3>
+            <p>Ruim 100 deelnemers gingen samen met hun buddy’s de uitdaging aan. Iedereen kreeg een gouden medaille en een groepsfoto met het team. Na de finish volgden een zanger, een clown, voetbal, pizza bakken en een polonaise.</p>
+            <a class="btn btn-line-light" href={PHOTO_ALBUM_2025} target="_blank" rel="noopener noreferrer">Volledig fotoalbum 2025 <Fragment set:html={arrow} /></a>
+          </div>
+        </div>
+        <div class="thumbs">
+          {ed25.slice(1).map((t, i) => (
+            <button class={`ph thumb ${t.focus}`} type="button" data-lb-list="e25" data-full={t.full} data-alt={t.alt} data-year="2025" aria-label={`Bekijk foto ${i + 2} van ${ed25.length} (2025) groot: ${t.alt}`}>
+              <Picture src={photo(t.file)} formats={FORMATS} widths={[320, 480]} sizes="(max-width: 760px) 31vw, 190px" quality={76} alt={t.alt} />
+              <Fragment set:html={zoomIcon} />
+            </button>
+          ))}
+          <a class="album" href={PHOTO_ALBUM_2025} target="_blank" rel="noopener noreferrer"><Fragment set:html={extIcon} />Alle foto’s van 2025</a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -267,7 +353,7 @@ const faqs = [
 <section class="close dark" aria-labelledby="close-title">
   <div class="wrap">
     <div class="close-photo rv">
-      <div class="ph f-2530"><Picture src={photo('dsc02530')} formats={FORMATS} widths={[640,960,1280,1600]} sizes="(max-width: 1240px) 94vw, 1180px" quality={78} alt="Groepsfoto van deelnemers, buddy’s en vrijwilligers die juichend hun armen in de lucht steken." /></div>
+      <div class="ph f-78"><Picture src={photo('b26-78')} formats={FORMATS} widths={[640, 1024]} sizes="(max-width: 1240px) 94vw, 1180px" quality={82} alt="Deelnemers en buddy’s juichen samen onder de rode finishboog (editie 2026)." /></div>
     </div>
     <div class="close-txt">
       <h2 id="close-title" class="rv">Een dag die je <span class="squig">samen<Fragment set:html={squiggle} /></span> meeneemt.</h2>
@@ -300,6 +386,7 @@ const faqs = [
           <ul>
             <li><a href="#over">Over de run</a></li>
             <li><a href="#sfeer">Sfeer</a></li>
+            <li><a href="#herbeleef">Herbeleef</a></li>
             <li><a href="#meedoen">Meedoen</a></li>
             <li><a href="#sponsoren">Sponsoren</a></li>
             <li><a href={PHOTO_ALBUM_2025} target="_blank" rel="noopener noreferrer">Fotoalbum 2025 ↗</a></li>
