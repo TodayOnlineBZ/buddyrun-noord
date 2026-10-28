@@ -492,3 +492,7 @@ button.ph:hover .zoom,button.ph:focus-visible .zoom{opacity:1;transform:none}
 .hero-frame picture{display:block;width:100%;height:100%}
 [hidden]{display:none!important}
 @media (max-width:760px){.jline path{opacity:.35;stroke-width:2}}
+
+.hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0}
+.btn:disabled{opacity:.7;cursor:progress;transform:none}
+.errsum a{color:#8C1D18}

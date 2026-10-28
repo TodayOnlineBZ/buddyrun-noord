@@ -240,10 +240,10 @@ function openPanel(type) {
   $('#panel-title').textContent = c.title;
   $('#panel-intro').textContent = c.intro;
   $('#panel-submit').textContent = c.submit;
-  $('#panel-later').textContent = 'Voor livegang: ' + c.later;
   fldBedrijf.hidden = !c.company;
   form.reset();
   clearErrors();
+  $('#sendfail').hidden = true;
   formWrap.hidden = false;
   ok.hidden = true;
   panel.hidden = false;
@@ -262,9 +262,12 @@ panel.addEventListener('keydown', (e) => {
   else trapTab(e, panel);
 });
 
-form.addEventListener('submit', (e) => {
+let sending = false;
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
+  if (sending) return;
   clearErrors();
+  $('#sendfail').hidden = true;
   const fd = new FormData(form);
   const v = (k) => String(fd.get(k) || '').trim();
   const errs = {};
@@ -289,9 +292,51 @@ form.addEventListener('submit', (e) => {
     $('#f-' + keys[0]).focus();
     return;
   }
-  // DEMO: hier komt later de koppeling met e-mail / inschrijftool. Er wordt niets verzonden.
-  $('#ok-title').textContent = `Bedankt, ${v('voornaam')}! (demo)`;
-  formWrap.hidden = true;
-  ok.hidden = false;
-  $('button', ok).focus();
+  // Spamval: echte bezoekers zien en vullen dit veld niet in
+  if (fd.get('botcheck')) return;
+
+  const c = cfg[panelType];
+  const naam = `${v('voornaam')} ${v('achternaam')}`.trim();
+  const payload = {
+    access_key: form.dataset.key,
+    subject: c.subject + (c.company && v('bedrijf') ? ` (${v('bedrijf')})` : ''),
+    from_name: 'Website Buddy Run Noord',
+    replyto: em,
+    Formulier: c.title,
+    ...(c.company ? { Bedrijfsnaam: v('bedrijf') } : {}),
+    Naam: naam,
+    'E-mail': em,
+    Telefoon: tel || '–',
+    Bericht: v('bericht') || '–',
+  };
+
+  const btn = $('#panel-submit');
+  const label = btn.textContent;
+  sending = true;
+  btn.disabled = true;
+  btn.textContent = 'Versturen…';
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.success) throw new Error(data.message || 'Versturen mislukt');
+    $('#ok-title').textContent = `Bedankt, ${v('voornaam')}!`;
+    $('#ok-text').textContent = panelType === 'deelnemer'
+      ? 'Je staat op de lijst. Zodra de nieuwe datum bekend is, hoor je het van ons.'
+      : 'Je bericht is verstuurd. We nemen zo snel mogelijk contact met je op.';
+    form.reset();
+    formWrap.hidden = true;
+    ok.hidden = false;
+    $('button', ok).focus();
+  } catch (err) {
+    $('#sendfail').hidden = false;
+    btn.focus();
+  } finally {
+    sending = false;
+    btn.disabled = false;
+    btn.textContent = label;
+  }
 });

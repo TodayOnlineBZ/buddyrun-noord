@@ -18,7 +18,7 @@ Vereist Node.js 22.23.4 of hoger (Astro 7).
 - `src/styles/global.css` — huisstijl (#00385C, #2BC5F0, #FD891E, #1F1F1F), Fredoka + Cabin (zelf gehost)
 
 ## Nog te doen voor livegang op buddyrun-noord.nl
-- **Formulieren zijn demo's**: koppelen aan e-mail/formulierbackend (vrijwilliger, sponsor) en een e-maillijst of inschrijftool ("Houd me op de hoogte").
+- Formulieren lopen via Web3Forms (key in `src/data/content.ts`). Beperk in het Web3Forms-dashboard de toegestane domeinen.
 - Privacyverklaring toevoegen.
 - `noindex` uit `index.astro` halen en `site` in `astro.config.mjs` aanpassen zodra het domein overgaat.
 - Datum volgende editie invullen zodra bekend (nu: "Nieuwe datum volgt").

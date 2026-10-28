@@ -2,6 +2,10 @@
 // Geen datum, locatie, prijzen of afstanden verzinnen: ontbrekende info = "Nieuwe datum volgt".
 
 export const CONTACT_EMAIL = 'buddyrunnoord@gmail.com';
+
+// Web3Forms (Pro). De access key is bedoeld om publiek in de site te staan;
+// beperk in het Web3Forms-dashboard de toegestane domeinen tot deze site.
+export const WEB3FORMS_KEY = 'abe177cc-ec69-4104-8154-61ba72517fb5';
 export const KVK = '96651768';
 export const PHOTO_ALBUM_2025 =
   'https://photos.google.com/share/AF1QipM2NYTTAYycgUYIXHarHxZcX46AxRh6CvyGb6Z-Eyf0sGDIHCNZJaOxtZHqZdwqdw?key=UUVRRVgzNmZyMW9Ha3phRkE5dTVRbGZJbFNPU0ln';
@@ -86,21 +90,21 @@ export const panels = {
     title: 'Houd me op de hoogte',
     intro: 'De inschrijving voor de volgende editie is nog niet open. Laat je gegevens achter, dan hoor je het zodra de nieuwe datum bekend is.',
     submit: 'Houd me op de hoogte',
+    subject: 'Buddy Run Noord – Houd me op de hoogte',
     company: false,
-    later: 'koppelen aan een e-maillijst of externe inschrijftool, inclusief privacyverklaring.',
   },
   vrijwilliger: {
     title: 'Word vrijwilliger',
     intro: 'Wat leuk dat je wilt helpen bij dit evenement! Laat je gegevens achter, dan nemen we contact met je op.',
     submit: 'Aanmelden als vrijwilliger',
+    subject: 'Buddy Run Noord – Nieuwe vrijwilliger',
     company: false,
-    later: 'koppelen aan e-mail naar de organisatie of een vrijwilligerstool.',
   },
   sponsor: {
     title: 'Word sponsor',
     intro: 'Wil je met je bedrijf dit unieke evenement steunen? Laat je gegevens achter, dan nemen we contact met je op.',
     submit: 'Verstuur aanvraag',
+    subject: 'Buddy Run Noord – Sponsoraanvraag',
     company: true,
-    later: 'koppelen aan e-mail naar de organisatie (formulierbackend).',
   },
 } as const;

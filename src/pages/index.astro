@@ -6,7 +6,7 @@ import '@fontsource/cabin/500.css';
 import '@fontsource/cabin/600.css';
 import '@fontsource/cabin/700.css';
 import '../styles/global.css';
-import { gallery, edition2025, edition2026, sponsors, panels, CONTACT_EMAIL, KVK, PHOTO_ALBUM_2025, PHOTO_ALBUM_2026, PHOTO_CREDIT_2026 } from '../data/content';
+import { WEB3FORMS_KEY, gallery, edition2025, edition2026, sponsors, panels, CONTACT_EMAIL, KVK, PHOTO_ALBUM_2025, PHOTO_ALBUM_2026, PHOTO_CREDIT_2026 } from '../data/content';
 import reelPoster from '../assets/reel-poster.jpg';
 import logoWhite from '../assets/brn-logo.png';
 import logoNavy from '../assets/brn-logo-navy.png';
@@ -395,7 +395,6 @@ const faqs = [
       </div>
       <div class="foot-bottom">
         <span>© Buddy Run Noord</span>
-        <span class="demo-pill">Prototype · formulieren zijn demonstraties</span>
       </div>
     </div>
   </footer>
@@ -407,15 +406,15 @@ const faqs = [
   <button class="ov-bg" type="button" tabindex="-1" aria-label="Sluiten" data-close></button>
   <div class="panel">
     <div class="panel-top">
-      <span class="tag or">Demo</span>
+      <span class="tag">Buddy Run Noord</span>
       <button class="xbtn" type="button" aria-label="Sluiten" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <h2 id="panel-title">Houd me op de hoogte</h2>
     <p class="intro-t" id="panel-intro"></p>
     <div id="panel-form-wrap">
-      <p class="demo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Dit is een demonstratie. Er wordt niets verzonden of opgeslagen.</span></p>
-      <form class="form" id="panel-form" novalidate>
-        <div aria-live="polite"><p class="errsum" id="errsum" hidden>Controleer de gemarkeerde velden.</p></div>
+      <form class="form" id="panel-form" novalidate data-key={WEB3FORMS_KEY}>
+        <div aria-live="polite"><p class="errsum" id="errsum" hidden>Controleer de gemarkeerde velden.</p><p class="errsum" id="sendfail" hidden>Het versturen is niet gelukt. Probeer het later nog eens, of mail ons via <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p></div>
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
         <div class="fld" id="fld-bedrijf">
           <label for="f-bedrijf">Bedrijfsnaam</label>
           <input id="f-bedrijf" name="bedrijf" type="text" autocomplete="organization" aria-describedby="e-bedrijf" />
@@ -448,13 +447,13 @@ const faqs = [
           <textarea id="f-bericht" name="bericht"></textarea>
         </div>
         <button class="btn btn-or" type="submit" id="panel-submit">Versturen</button>
-        <p class="later" id="panel-later"></p>
+        <p class="later">We gebruiken je gegevens alleen om contact met je op te nemen over Buddy Run Noord.</p>
       </form>
     </div>
     <div class="ok" id="panel-ok" role="status" hidden>
       <div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-      <h3 id="ok-title">Bedankt! (demo)</h3>
-      <p>Zo ziet de bevestiging eruit. In deze demonstratie is er niets verzonden: de echte koppeling volgt bij de technische uitwerking.</p>
+      <h3 id="ok-title">Bedankt!</h3>
+      <p id="ok-text">Je bericht is verstuurd. We nemen zo snel mogelijk contact met je op.</p>
       <button class="btn btn-navy" type="button" style="margin-top:20px" data-close>Terug naar de website</button>
     </div>
   </div>
