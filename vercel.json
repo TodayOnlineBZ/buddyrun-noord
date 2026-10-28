@@ -1,0 +1,23 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/home", "destination": "/", "permanent": true },
+    { "source": "/index.php", "destination": "/", "permanent": true },
+    { "source": "/feed", "destination": "/", "permanent": true },
+    { "source": "/feed/(.*)", "destination": "/", "permanent": true },
+    { "source": "/wp-admin", "destination": "/", "permanent": false },
+    { "source": "/wp-admin/(.*)", "destination": "/", "permanent": false },
+    { "source": "/wp-login.php", "destination": "/", "permanent": false },
+    { "source": "/privacy-policy", "destination": "/privacy", "permanent": true },
+    { "source": "/privacybeleid", "destination": "/privacy", "permanent": true },
+    { "source": "/privacyverklaring", "destination": "/privacy", "permanent": true },
+    { "source": "/aanmelden", "destination": "/#meedoen", "permanent": true },
+    { "source": "/sponsoren", "destination": "/#sponsoren", "permanent": true }
+  ],
+  "headers": [
+    { "source": "/_astro/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
+    { "source": "/video/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }] }
+  ]
+}

@@ -1,0 +1,35 @@
+---
+import SubPage from '../layouts/SubPage.astro';
+import { CONTACT_EMAIL, KVK } from '../data/content';
+---
+<SubPage title="Privacyverklaring" description="Hoe Buddy Run Noord omgaat met de gegevens die je via de website achterlaat.">
+  <h1>Privacyverklaring</h1>
+  <p class="meta">Laatst bijgewerkt: oktober 2026</p>
+
+  <p>Buddy Run Noord (KvK {KVK}) gaat zorgvuldig om met je persoonsgegevens. In deze verklaring lees je welke gegevens we via deze website verzamelen, waarom, en wat je rechten zijn.</p>
+
+  <h2>Welke gegevens verzamelen we?</h2>
+  <p>Alleen de gegevens die je zelf invult in een van onze formulieren (“Houd me op de hoogte”, “Word vrijwilliger” of “Word sponsor”):</p>
+  <ul>
+    <li>voornaam en achternaam;</li>
+    <li>e-mailadres;</li>
+    <li>telefoonnummer (als je dat invult);</li>
+    <li>bedrijfsnaam (bij een sponsoraanvraag);</li>
+    <li>je bericht (als je dat invult).</li>
+  </ul>
+
+  <h2>Waarvoor gebruiken we ze?</h2>
+  <p>We gebruiken je gegevens alleen om contact met je op te nemen over Buddy Run Noord: om je te laten weten wanneer de volgende editie is, om je aanmelding als vrijwilliger op te volgen of om je sponsoraanvraag te bespreken. We gebruiken je gegevens niet voor andere doeleinden en verkopen ze niet aan derden.</p>
+
+  <h2>Hoe worden ze verwerkt?</h2>
+  <p>Als je een formulier verstuurt, gaat je bericht via de formulierdienst Web3Forms als e-mail naar de organisatie van Buddy Run Noord. We bewaren je gegevens niet langer dan nodig is voor het doel waarvoor je ze hebt achtergelaten.</p>
+
+  <h2>Cookies</h2>
+  <p>Deze website gebruikt geen tracking- of advertentiecookies en geen analysediensten. Lettertypes, foto’s en de video worden vanaf onze eigen website geladen. Klik je op een link naar een fotoalbum of een sponsor, dan gelden op die externe website de regels van die partij.</p>
+
+  <h2>Jouw rechten</h2>
+  <p>Je mag ons altijd vragen welke gegevens we van je hebben, en je kunt vragen om ze aan te passen of te verwijderen. Stuur daarvoor een e-mail naar <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Ben je het niet eens met hoe we met je gegevens omgaan, dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens.</p>
+
+  <h2>Contact</h2>
+  <p>Vragen over deze privacyverklaring? Mail naar <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+</SubPage>

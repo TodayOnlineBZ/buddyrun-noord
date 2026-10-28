@@ -34,7 +34,7 @@ const zoomIcon = '<span class="zoom" aria-hidden="true"><svg viewBox="0 0 24 24"
 const calIcon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>';
 const extIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>';
 
-const site = 'https://buddyrun-noord.vercel.app';
+const site = 'https://buddyrun-noord.nl';
 const title = 'Buddy Run Noord — Samen lukt er zoveel meer';
 const description = 'Een obstakelrun vol plezier, verbinding en bijzondere momenten. Voor mensen met een verstandelijke beperking en hun buddy’s. Groningen — nieuwe datum volgt.';
 const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
@@ -56,8 +56,8 @@ const faqs = [
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title}</title>
   <meta name="description" content={description} />
-  <!-- Prototype: niet indexeren zolang buddyrun-noord.nl de officiële site is -->
-  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href={`${site}/`} />
+  <meta property="og:url" content={`${site}/`} />
   <meta name="theme-color" content="#00385C" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -379,6 +379,7 @@ const faqs = [
           <ul>
             <li><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></li>
             <li>KvK {KVK}</li>
+            <li><a href="/privacy">Privacyverklaring</a></li>
           </ul>
         </div>
         <div>
@@ -447,7 +448,7 @@ const faqs = [
           <textarea id="f-bericht" name="bericht"></textarea>
         </div>
         <button class="btn btn-or" type="submit" id="panel-submit">Versturen</button>
-        <p class="later">We gebruiken je gegevens alleen om contact met je op te nemen over Buddy Run Noord.</p>
+        <p class="later">We gebruiken je gegevens alleen om contact met je op te nemen over Buddy Run Noord. Lees onze <a href="/privacy" target="_blank" rel="noopener">privacyverklaring</a>.</p>
       </form>
     </div>
     <div class="ok" id="panel-ok" role="status" hidden>

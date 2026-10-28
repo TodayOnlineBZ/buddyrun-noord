@@ -19,6 +19,6 @@ Vereist Node.js 22.23.4 of hoger (Astro 7).
 
 ## Nog te doen voor livegang op buddyrun-noord.nl
 - Formulieren lopen via Web3Forms (key in `src/data/content.ts`). Beperk in het Web3Forms-dashboard de toegestane domeinen.
-- Privacyverklaring toevoegen.
-- `noindex` uit `index.astro` halen en `site` in `astro.config.mjs` aanpassen zodra het domein overgaat.
+- Privacyverklaring staat op /privacy (laten goedkeuren door de organisatie).
+- Domein: buddyrun-noord.nl (www verwijst door). DNS bij Cloud86: A @ → 76.76.21.21, CNAME www → cname.vercel-dns.com.
 - Datum volgende editie invullen zodra bekend (nu: "Nieuwe datum volgt").

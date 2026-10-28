@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+import '@fontsource-variable/fredoka/wght.css';
+import '@fontsource/cabin/400.css';
+import '@fontsource/cabin/600.css';
+import '@fontsource/cabin/700.css';
+import '../styles/global.css';
+import logoNavy from '../assets/brn-logo-navy.png';
+import { CONTACT_EMAIL, KVK } from '../data/content';
+
+interface Props { title: string; description: string; noindex?: boolean }
+const { title, description, noindex = false } = Astro.props;
+---
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title} — Buddy Run Noord</title>
+  <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex" />}
+  <meta name="theme-color" content="#00385C" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+</head>
+<body>
+  <header class="sub-hdr">
+    <div class="wrap sub-hdr-in">
+      <a href="/" aria-label="Buddy Run Noord — naar de homepage"><Image src={logoNavy} alt="Buddy Run Noord" width={260} class="sub-logo" loading="eager" /></a>
+      <a class="btn btn-ghost btn-sm" href="/">Terug naar de website</a>
+    </div>
+  </header>
+  <main class="wrap sub-main">
+    <slot />
+  </main>
+  <footer class="sub-foot">
+    <div class="wrap">
+      <p>© Buddy Run Noord · KvK {KVK} · <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+    </div>
+  </footer>
+</body>
+</html>
+
+<style is:global>
+  .sub-hdr { padding: 20px 0; border-bottom: 1px solid rgba(0,56,92,.1); }
+  .sub-hdr-in { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .sub-logo { width: 130px; height: auto; }
+  .sub-main { padding-top: 64px; padding-bottom: 96px; max-width: 820px; }
+  .sub-main h1 { font-size: clamp(36px, 5vw, 56px); }
+  .sub-main h2 { font-size: 26px; margin-top: 40px; }
+  .sub-main p, .sub-main li { color: #2A3A46; margin-top: 12px; }
+  .sub-main ul { padding-left: 22px; }
+  .sub-main .meta { color: #4A5A66; font-size: 15px; margin-top: 14px; }
+  .sub-foot { background: #00385C; color: #D5E6F0; padding: 28px 0; font-size: 15px; }
+  .sub-foot a { color: #FFFFFF; }
+</style>

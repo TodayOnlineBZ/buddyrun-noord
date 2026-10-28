@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://buddyrun-noord.nl/sitemap.xml
